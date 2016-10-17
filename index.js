@@ -213,14 +213,22 @@ function callUberApi(lat,long,senderID){
         var attachment = {};
         var elements = [];
         var payload = {};
-        var recipient = {}
+        var recipient = {};
+        var buttons = [];
         payload.template_type = "generic";
+        button = {
+          type: "web_url",
+          url: "https://www.oculus.com/en-us/rift/",
+          title: "Open Web URL"
+        };
+        buttons.push(button);
         for (var product in products) {
           var element = {};
           element.title= product.display_name,
           element.subtitle= product.description,
           element.item_url= "https://www.uber.com/en-IN/",
-          element.image_url= product.image
+          element.image_url= product.image,
+          element.buttons = button
           elements.push(element);
         }
         payload.elements = elements;
@@ -230,7 +238,7 @@ function callUberApi(lat,long,senderID){
         recipient.id = senderID;
         messageData.recipient = recipient;
         messageData.message = message;
-        console.log("messageData is",JSON.stringify(messageData));        
+        console.log("messageData is",JSON.stringify(messageData));
         callSendAPI(messageData)
   });
 }
