@@ -93,8 +93,8 @@ app.post('/webhook/', function (req, res) {
      }
    } else if (messageAttachments) {
      console.log("maps info");
-     console.log("lat",messageAttachments[0].payload.coordinates.lat);
-     console.log("long",messageAttachments[0].payload.coordinates.long);
+     lat = messageAttachments[0].payload.coordinates.lat;
+     long = messageAttachments[0].payload.coordinates.long;
      callUberApi(lat,long);
      sendTextMessage(senderID, "Message with attachment received");
    }
