@@ -224,7 +224,7 @@ function callUberApi(lat,long,senderID){
           elements.push(element);
         }
         payload.elements = elements;
-        attachments.type = "template";
+        attachment.type = "template";
         attachment.payload = payload;
         message.attachment = attachment;
         recipient.id = senderID;
