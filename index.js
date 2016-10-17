@@ -199,7 +199,7 @@ function receivedPostback(event) {
 function callUberApi(lat,long){
   var url = 'https://api.uber.com/v1/products?latitude="+lat+"&longitude="+long';
   console.log("url is",url);
-  requests.get({
+  request.get({
     url: url,
     headers: {
       "Authorization": "Token " + TOKEN
