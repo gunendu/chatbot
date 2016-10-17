@@ -95,7 +95,7 @@ app.post('/webhook/', function (req, res) {
      console.log("maps info",messageAttachments);
      var lat = messageAttachments[0].payload.coordinates.lat;
      var long = messageAttachments[0].payload.coordinates.long;
-     callUberApi(lat,long);
+     callUberApi(lat,long,senderID);
      sendTextMessage(senderID, "Message with attachment received");
    }
  }
@@ -196,7 +196,7 @@ function receivedPostback(event) {
   sendTextMessage(senderID, "Postback called");
 }
 
-function callUberApi(lat,long){
+function callUberApi(lat,long,senderID){
   var url = "https://api.uber.com/v1/products?latitude="+lat+"&longitude="+long;
   console.log("url is",url);
   request.get({
@@ -205,7 +205,33 @@ function callUberApi(lat,long){
       "Authorization": "Token " + TOKEN
     }
   }, function(error,response,body){
-        console.log("body",body,response,error);
+        var body = JSON.parse(body);
+        console.log("body",body);
+        var products = body.products;
+        var messageData = {}
+        var message = {};
+        var attachment = {};
+        var elements = [];
+        var payload = {};
+        var recipient = {}
+        payload.template_type = "generic";
+        for (var product in products) {
+          var element = {};
+          element.title: product.display_name,
+          element.subtitle: product.description,
+          element.item_url: "https://www.uber.com/en-IN/",
+          element.image_url: product.image
+          elements.push(element);
+        }
+        payload.elements = elements;
+        attachments.type = "template";
+        attachment.payload = payload;
+        message.attachment = attachment;
+        recipient.id = senderID;
+        messageData.recipient = recipient;
+        messageData.message = message;
+
+        console.log("messageData is",messageData);
   });
 }
 
