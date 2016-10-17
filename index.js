@@ -206,8 +206,8 @@ function callUberApi(lat,long,senderID){
     }
   }, function(error,response,body){
         var body = JSON.parse(body);
-        console.log("body",body);
         var products = body.products;
+        console.log("products",products,typeof(products));
         var messageData = {}
         var message = {};
         var attachment = {};
@@ -223,6 +223,7 @@ function callUberApi(lat,long,senderID){
         };
         buttons.push(button);
         for (var product in products) {
+          console.log("for each product",product);
           var element = {};
           element.title= product.display_name,
           element.subtitle= product.description,
