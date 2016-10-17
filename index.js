@@ -95,6 +95,7 @@ app.post('/webhook/', function (req, res) {
      console.log("maps info");
      console.log("lat",messageAttachments[0].payload.coordinates.lat);
      console.log("long",messageAttachments[0].payload.coordinates.long);
+     callUberApi(lat,long);
      sendTextMessage(senderID, "Message with attachment received");
    }
  }
@@ -190,12 +191,27 @@ function receivedPostback(event) {
   console.log("Received postback for user %d and page %d with payload '%s' " +
     "at %d", senderID, recipientID, payload, timeOfPostback);
 
+  callUberApi();
   // When a postback is called, we'll send a message back to the sender to
   // let them know it was successful
   sendTextMessage(senderID, "Postback called");
 }
 
+function callUberApi(lat,long){
+  url = 'https://api.uber.com/v1/products?latitude="+lat+"&longitude="+long'
+  console.log("url is",url);
+  requests.get({
+    url: url,
+    headers: {
+      "Authorization": "Token" + TOKEN
+    }
+  }, function(error,response,body){
+        console.log("body");
+  });
+}
+
 const PAGE_ACCESS_TOKEN = "EAAJlIf8qzEYBAAmO0HQLdhFZCiFnH1EUKZCt80SnIlPZCRJidmBCFQwllotIBWAK4fzhkDhFN5BFbEGYWQrjh1BIBOspXBKMMsAffNMLau7DZAfLTfjHZA3ZBZAhF7EQ3ovV6bhqeTyj5ZBjifswCAJg4U9kZB0JHsZBv5fEpRfnZB9mQZDZD"
+const TOKEN = "rOTkxK0vljzip_2yKeONQmB37QZTMCFmvxmzdhAv"
 
 // Spin up the server
 app.listen(app.get('port'), function() {
