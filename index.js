@@ -215,6 +215,8 @@ function callUberApi(lat,long,senderID){
         var recipient = {};
         var buttons = [];
         payload.template_type = "generic";
+        recipient.id = senderID;
+        messageData.recipient = recipient;
         var button = {
           type: "web_url",
           url: "https://www.oculus.com/en-us/rift/",
@@ -229,18 +231,17 @@ function callUberApi(lat,long,senderID){
           element.subtitle= product.description,
           element.item_url= "https://www.uber.com/en-IN/",
           element.image_url= product.image,
-          element.buttons = button
+          element.buttons = buttons
           elements.push(element);
         }
         payload.elements = elements;
         attachment.type = "template";
         attachment.payload = payload;
         message.attachment = attachment;
-        recipient.id = senderID;
         messageData.recipient = recipient;
         messageData.message = message;
         console.log("messageData is",JSON.stringify(messageData));
-        callSendAPI(JSON.stringify(messageData))
+        callSendAPI(messageData)
   });
 }
 
