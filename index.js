@@ -216,7 +216,7 @@ function callUberApi(lat,long,senderID){
         var recipient = {};
         var buttons = [];
         payload.template_type = "generic";
-        button = {
+        var button = {
           type: "web_url",
           url: "https://www.oculus.com/en-us/rift/",
           title: "Open Web URL"
