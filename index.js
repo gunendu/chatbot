@@ -240,7 +240,7 @@ function callUberApi(lat,long,senderID){
         messageData.recipient = recipient;
         messageData.message = message;
         console.log("messageData is",JSON.stringify(messageData));
-        callSendAPI(messageData)
+        callSendAPI(JSON.stringify(messageData))
   });
 }
 
