@@ -39,8 +39,6 @@ app.post('/webhook/', function (req, res) {
           receivedAuthentication(messagingEvent);
         } else if (messagingEvent.message) {
           receivedMessage(messagingEvent);
-        } else if (messagingEvent.delivery) {
-          receivedDeliveryConfirmation(messagingEvent);
         } else if (messagingEvent.postback) {
           receivedPostback(messagingEvent);
         } else {
@@ -116,7 +114,6 @@ function callSendAPI(messageData) {
     qs: { access_token: PAGE_ACCESS_TOKEN },
     method: 'POST',
     json: messageData
-
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       var recipientId = body.recipient_id;
@@ -168,6 +165,23 @@ function sendGenericMessage(senderID) {
         }
     }
     callSendAPI(messageData)
+}
+
+function receivedPostback(event) {
+  var senderID = event.sender.id;
+  var recipientID = event.recipient.id;
+  var timeOfPostback = event.timestamp;
+
+  // The 'payload' param is a developer-defined field which is set in a postback
+  // button for Structured Messages.
+  var payload = event.postback.payload;
+
+  console.log("Received postback for user %d and page %d with payload '%s' " +
+    "at %d", senderID, recipientID, payload, timeOfPostback);
+
+  // When a postback is called, we'll send a message back to the sender to
+  // let them know it was successful
+  sendTextMessage(senderID, "Postback called");
 }
 
 const PAGE_ACCESS_TOKEN = "EAAJlIf8qzEYBAAmO0HQLdhFZCiFnH1EUKZCt80SnIlPZCRJidmBCFQwllotIBWAK4fzhkDhFN5BFbEGYWQrjh1BIBOspXBKMMsAffNMLau7DZAfLTfjHZA3ZBZAhF7EQ3ovV6bhqeTyj5ZBjifswCAJg4U9kZB0JHsZBv5fEpRfnZB9mQZDZD"
