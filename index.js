@@ -217,10 +217,10 @@ function callUberApi(lat,long,senderID){
         payload.template_type = "generic";
         for (var product in products) {
           var element = {};
-          element.title: product.display_name,
-          element.subtitle: product.description,
-          element.item_url: "https://www.uber.com/en-IN/",
-          element.image_url: product.image
+          element.title= product.display_name,
+          element.subtitle= product.description,
+          element.item_url= "https://www.uber.com/en-IN/",
+          element.image_url= product.image
           elements.push(element);
         }
         payload.elements = elements;
