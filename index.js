@@ -221,8 +221,9 @@ function callUberApi(lat,long,senderID){
           title: "Open Web URL"
         };
         buttons.push(button);
-        for (var product in products) {
-          console.log("for each product",product);
+        for (var index in products) {
+          console.log("for each product",products[index]);
+          var product = products[index];
           var element = {};
           element.title= product.display_name,
           element.subtitle= product.description,
