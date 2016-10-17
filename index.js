@@ -191,7 +191,6 @@ function receivedPostback(event) {
   console.log("Received postback for user %d and page %d with payload '%s' " +
     "at %d", senderID, recipientID, payload, timeOfPostback);
 
-  callUberApi();
   // When a postback is called, we'll send a message back to the sender to
   // let them know it was successful
   sendTextMessage(senderID, "Postback called");
@@ -203,10 +202,10 @@ function callUberApi(lat,long){
   requests.get({
     url: url,
     headers: {
-      "Authorization": "Token" + TOKEN
+      "Authorization": "Token " + TOKEN
     }
   }, function(error,response,body){
-        console.log("body");
+        console.log("body",body,response,error);
   });
 }
 
