@@ -132,7 +132,7 @@ function callSendAPI(messageData) {
 function sendGenericMessage(senderID) {
     let messageData = {
         recipient: {
-          id: sender
+          id: senderID
         },
         "attachment": {
             "type": "template",
