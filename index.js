@@ -93,9 +93,9 @@ app.post('/webhook/', function (req, res) {
      }
    } else if (messageAttachments) {
      console.log("maps info",messageAttachments);
-     //var lat = messageAttachments[0].payload.coordinates.lat;
-     //var long = messageAttachments[0].payload.coordinates.long;
-     //callUberApi(lat,long);
+     var lat = messageAttachments[0].payload.coordinates.lat;
+     var long = messageAttachments[0].payload.coordinates.long;
+     callUberApi(lat,long);
      sendTextMessage(senderID, "Message with attachment received");
    }
  }
