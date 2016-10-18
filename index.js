@@ -92,10 +92,11 @@ app.post('/webhook/', function (req, res) {
          sendTextMessage(senderID, messageText);
      }
    } else if (messageAttachments) {
-     console.log("maps info",messageAttachments);
      var lat = messageAttachments[0].payload.coordinates.lat;
      var long = messageAttachments[0].payload.coordinates.long;
-     callUberApi(lat,long,senderID);
+     var body = callUberApi(lat,long,senderID);
+     var messageData = formGenericMessage(body,senderID);
+     callSendAPI(messageData);
      sendTextMessage(senderID, "Message with attachment received");
    }
  }
@@ -132,50 +133,43 @@ function callSendAPI(messageData) {
   });
 }
 
-function sendGenericMessage(senderID) {
-  var messageData = {
-    recipient: {
-      id: senderID
-    },
-   message: {
-   attachment: {
-     type: "template",
-     payload: {
-       template_type: "generic",
-       elements: [{
-         title: "rift",
-         subtitle: "Next-generation virtual reality",
-         item_url: "https://www.oculus.com/en-us/rift/",
-         image_url: "http://messengerdemo.parseapp.com/img/rift.png",
-         buttons: [{
-           type: "web_url",
-           url: "https://www.oculus.com/en-us/rift/",
-           title: "Open Web URL"
-         }, {
-           type: "postback",
-           title: "Call Postback",
-           payload: "Payload for first bubble",
-         }],
-       }, {
-         title: "touch",
-         subtitle: "Your Hands, Now in VR",
-         item_url: "https://www.oculus.com/en-us/touch/",
-         image_url: "http://messengerdemo.parseapp.com/img/touch.png",
-         buttons: [{
-           type: "web_url",
-           url: "https://www.oculus.com/en-us/touch/",
-           title: "Open Web URL"
-         }, {
-           type: "postback",
-           title: "Call Postback",
-           payload: "Payload for second bubble",
-         }]
-       }]
-     }
-   }
- }
-};
-    callSendAPI(messageData)
+function formGenericMessage(body,senderID) {
+  var products = body.products;
+  console.log("products",products,typeof(products));
+  var messageData = {}
+  var message = {};
+  var attachment = {};
+  var elements = [];
+  var payload = {};
+  var recipient = {};
+  var buttons = [];
+  payload.template_type = "generic";
+  recipient.id = senderID;
+  messageData.recipient = recipient;
+  var button = {
+    type: "web_url",
+    url: "https://www.oculus.com/en-us/rift/",
+    title: "Open Web URL"
+  };
+  buttons.push(button);
+  for (var index in products) {
+    console.log("for each product",products[index]);
+    var product = products[index];
+    var element = {};
+    element.title= product.display_name,
+    element.subtitle= product.description,
+    element.item_url= "https://www.uber.com/en-IN/",
+    element.image_url= product.image,
+    element.buttons = buttons
+    elements.push(element);
+  }
+  payload.elements = elements;
+  attachment.type = "template";
+  attachment.payload = payload;
+  message.attachment = attachment;
+  messageData.recipient = recipient;
+  messageData.message = message;
+  return messageData;
 }
 
 function receivedPostback(event) {
@@ -222,44 +216,10 @@ function callUberApi(lat,long,senderID){
       "Authorization": "Token " + TOKEN
     }
   }, function(error,response,body){
+        if(!error) {
         var body = JSON.parse(body);
-        var products = body.products;
-        console.log("products",products,typeof(products));
-        var messageData = {}
-        var message = {};
-        var attachment = {};
-        var elements = [];
-        var payload = {};
-        var recipient = {};
-        var buttons = [];
-        payload.template_type = "generic";
-        recipient.id = senderID;
-        messageData.recipient = recipient;
-        var button = {
-          type: "web_url",
-          url: "https://www.oculus.com/en-us/rift/",
-          title: "Open Web URL"
-        };
-        buttons.push(button);
-        for (var index in products) {
-          console.log("for each product",products[index]);
-          var product = products[index];
-          var element = {};
-          element.title= product.display_name,
-          element.subtitle= product.description,
-          element.item_url= "https://www.uber.com/en-IN/",
-          element.image_url= product.image,
-          element.buttons = buttons
-          elements.push(element);
+        return body;
         }
-        payload.elements = elements;
-        attachment.type = "template";
-        attachment.payload = payload;
-        message.attachment = attachment;
-        messageData.recipient = recipient;
-        messageData.message = message;
-        console.log("messageData is",JSON.stringify(messageData));
-        callSendAPI(messageData)
   });
 }
 
