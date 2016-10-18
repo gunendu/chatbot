@@ -194,7 +194,7 @@ function receivedPostback(event) {
   }
   // When a postback is called, we'll send a message back to the sender to
   // let them know it was successful
-  sendTextMessage(senderID, "Postback called");
+  //sendTextMessage(senderID, "Postback called");
 }
 
 function askLocation(senderID) {
@@ -203,7 +203,7 @@ function askLocation(senderID) {
   var message = {};
   var quick_replies = [];
   recipient.id = senderID;
-  message.text = "Please share your location:";
+  message.text = "Please share your location";
   quick_replies.push({"content_type":"location"});
   message.quick_replies = quick_replies;
   messageData.recipient = recipient;
