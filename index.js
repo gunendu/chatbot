@@ -216,8 +216,10 @@ function callUberApi(lat,long,senderID){
       "Authorization": "Token " + TOKEN
     }
   }, function(error,response,body){
+        console.log("error is",error);
         if(!error) {
         var body = JSON.parse(body);
+        console.log("body callUberApi",body);
         return body;
         }
   });
