@@ -94,10 +94,13 @@ app.post('/webhook/', function (req, res) {
    } else if (messageAttachments) {
      var lat = messageAttachments[0].payload.coordinates.lat;
      var long = messageAttachments[0].payload.coordinates.long;
-     var body = callUberApi(lat,long,senderID);
-     var messageData = formGenericMessage(body,senderID);
-     callSendAPI(messageData);
-     sendTextMessage(senderID, "Message with attachment received");
+     callUberApi(lat,long,senderID,function(error,body){
+       if(!error) {
+         var messageData = formGenericMessage(body,senderID);
+         callSendAPI(messageData);
+         sendTextMessage(senderID, "Message with attachment received");
+       }
+     });
    }
  }
 
@@ -207,7 +210,7 @@ function askLocation(senderID) {
   return messageData;
 }
 
-function callUberApi(lat,long,senderID){
+function callUberApi(lat,long,senderID,callback){
   var url = "https://api.uber.com/v1/products?latitude="+lat+"&longitude="+long;
   console.log("url is",url);
   request.get({
@@ -218,9 +221,9 @@ function callUberApi(lat,long,senderID){
   }, function(error,response,body){
         console.log("error is",error);
         if(!error) {
-        var body = JSON.parse(body);
-        console.log("body callUberApi",body);
-        return body;
+          var body = JSON.parse(body);
+          console.log("body callUberApi",body);
+          callback(null,body);
         }
   });
 }
