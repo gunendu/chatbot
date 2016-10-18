@@ -93,7 +93,7 @@ app.post('/webhook/', function (req, res) {
      }
    } else if (messageAttachments) {
      console.log("messageAttachments",messageAttachments);
-     /*var lat = messageAttachments[0].payload.coordinates.lat;
+     var lat = messageAttachments[0].payload.coordinates.lat;
      var long = messageAttachments[0].payload.coordinates.long;
      callUberApi(lat,long,senderID,function(error,body){
        if(!error) {
@@ -101,7 +101,7 @@ app.post('/webhook/', function (req, res) {
          callSendAPI(messageData);
          sendTextMessage(senderID, "Message with attachment received");
        }
-     });*/
+     });
    }
  }
 
