@@ -191,7 +191,7 @@ function receivedPostback(event) {
     "at %d", senderID, recipientID, payload, timeOfPostback);
 
   if(payload.indexOf("START_ORDER") > -1) {
-     var messageData = askLocation();
+     var messageData = askLocation(senderID);
      callSendAPI(messageData);
   }
   // When a postback is called, we'll send a message back to the sender to
@@ -199,7 +199,7 @@ function receivedPostback(event) {
   sendTextMessage(senderID, "Postback called");
 }
 
-function askLocation() {
+function askLocation(senderID) {
   var messageData = {};
   var recipient = {};
   var message = {};
